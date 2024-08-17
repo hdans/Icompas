@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kontol</title>
+</head>
+<body>
+    <h1>Data yang belum bayar Icompas</h1>
+
+    <h2>Anak BE yang blm daftar</h2>
+    <ol id="anak-be-not-in-sheets"></ol>
+
+    <h2>Non BE yang belm daftar</h2>
+    <ol id="icon-not-in-be-or-sheets"></ol>
+
+    <script>
+        const apiKey = 'AIzaSyDwu3RpzYIQDLkvz-nFtCRpLaZm6CqMUc4';
+        const spreadsheetId = '1XusyZ1nI7rWSq4Jg5qXCMNUj7fImjP3RtCv96KFIYJk';
+        const range = 'C2:C';
+
+        const totalAnggotaIcon = [
+            "Nadia Mulyadi", "Muhammad Faiz Fahri", "Dylan Amadeus", "Jonathan Nugroho Adhi Wicaksono", 
+            "Muhammad Miqdad Alfattah Josi", "Muhammad Nefrit Mahardika", "Muhammad Zhafran Shiddiq", 
+            "Risya Annisa' Chairyah", "Muhammad Wildan Kamil", "Faizzani Zingsky Pratiwi", 
+            "Panji Iman Sujatmiko", "Ridho Delfianov", "Stevanus Felixiano", "Gerald Christopher Andreas", 
+            "Devi Humaira", "Rafa Agustant", "Evan Ahnaf Satyatama", "Giast Ahmad", "louis Koni Sung", 
+            "Nurkahfi Amran Rahmada", "Reymontha Tarigan", "Marciano Lie", "Josef Harvey Mangaratua", 
+            "Muhammad Ichsan Firdaus", "Muhamad Rumi Rifai", "M Yusup Adi Surya", "Radhian Kemal. S", 
+            "Reghina Maisarah", "Jannatul Salsabila Putri Sanesa", "Vernandika Stanley Hansen", "Hosea Javier", 
+            "Tegar Muhamad Rizki", "Umar Bin Abdul Aziz", "Alif Al Husaini", "Fernaldy Andika Ekayafi", 
+            "Daffa Burane Nugraha", "Mohammad Aria Ardhana", "Farhan Karisma", "Darren Christian Liharja", 
+            "Candra Wibawa", "Randy Harisna Mahsa", "Muhammad Adzikra Dhiya Alfauzan", "Adrian Jeremia Kurniawan", 
+            "Adnan Hafizh Sinatria", "Leonardo Louis", "Sanjukin Ndube Pinem", "Jason Natanael Krisyanto", 
+            "Ivan Arsy Himawan", "Fahri Nizar Argubi", "Rayhan Athar Prasnaputra", "Tamara Joy", 
+            "Muhammad Exsfo Al Banjari", "Theodora Paulina Walukow", "M. Ilhamsyah .R", "Dzakwan Fadhlullah", 
+            "Muhammad calvin asan", "Drias Ameliano Kevin David", "Ecki Fawwaz Hardian", 
+            "Muhammad Danendra Syah Hidayatullah", "Muhammad Is'Ad Prabaswara", "Shervina Ananda Hardellya", 
+            "Muhammad Nabil Indiharto", "Naufal Fakhri Ilyas", "Rais Abbiyu Putra", 
+            "Imam Farrel Rayhandita Soetardjo Prabowo", "Nabila Rahmanisa Putri Arzetta", 
+            "Agra Palasara Putra Ardhiwiratno", "Gito Lesmana", "Muhammad Rizki Putra", 
+            "Rayhan Nugrah Kristio", "Tabina Adelia Rafa", "Wildan Rahmantya Andalaluna", 
+            "Anel Fuad Abiyyu", "Devalco Aghazzan Muslion", "Muhammad Satria Dharma", 
+            "Shaka Reyhan Saputra", "Jaya Goval Unedo Hutasoit", "Novem Romadhofi Kika", 
+            "Rio Irawan", "Tegar Posma Diaz Simanjuntak", "Angga Prasetyo", "Robert William"
+        ];
+
+        const anakBE = [
+            "Nadia Mulyadi", "Dylan Amadeus", "Jonathan Nugroho Adhi Wicaksono", 
+            "Muhammad Nefrit Mahardika", "Muhammad Zhafran Shiddiq", "Muhammad Wildan Kamil", 
+            "Faizzani Zingsky Pratiwi", "Panji Iman Sujatmiko", "Devi Humaira", "Rafa Agustant", 
+            "Evan Ahnaf Satyatama", "louis Koni Sung", "Nurkahfi Amran Rahmada", 
+            "Josef Harvey Mangaratua", "Muhammad Ichsan Firdaus", "Reghina Maisarah", 
+            "Hosea Javier", "Tegar Muhamad Rizki", "Umar Bin Abdul Aziz", "Alif Al Husaini", 
+            "Daffa Burane Nugraha", "Farhan Karisma", "Adrian Jeremia Kurniawan", 
+            "Adnan Hafizh Sinatria", "Jason Natanael Krisyanto", "Fahri Nizar Argubi", 
+            "Shervina Ananda Hardellya", "Naufal Fakhri Ilyas", "Nabila Rahmanisa Putri Arzetta", 
+            "Rayhan Nugrah Kristio", "Tabina Adelia Rafa", "Anel Fuad Abiyyu"
+        ];
+
+        fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                const sheetData = data.values.flat();
+
+                const anakBENotInSheets = anakBE.filter(name => !sheetData.includes(name));
+                document.getElementById('anak-be-not-in-sheets').innerHTML = anakBENotInSheets.map((name, index) => `<li>${name}</li>`).join('');
+
+                const iconNotInBEOrSheets = totalAnggotaIcon.filter(name => !anakBE.includes(name) && !sheetData.includes(name));
+                document.getElementById('icon-not-in-be-or-sheets').innerHTML = iconNotInBEOrSheets.map((name, index) => `<li>${name}</li>`).join('');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('anak-be-not-in-sheets').innerHTML = 'Gagal mengambil data.';
+                document.getElementById('icon-not-in-be-or-sheets').innerHTML = 'Gagal mengambil data.';
+            });
+    </script>
+</body>
+</html>
