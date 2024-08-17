@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kontol</title>
+    <title>Data Icompas</title>
 </head>
 <body>
     <h1>Data yang belum bayar Icompas</h1>
 
-    <h2>Anak BE yang blm daftar</h2>
+    <h2 id="sisa-slot-anak-be"></h2>
+
+    <h2>Anak BE yang belum daftar</h2>
     <ol id="anak-be-not-in-sheets"></ol>
 
-    <h2>Non BE yang belm daftar</h2>
+    <h2>Non BE yang belum daftar</h2>
     <ol id="icon-not-in-be-or-sheets"></ol>
 
     <script>
@@ -26,20 +28,19 @@
             "Panji Iman Sujatmiko", "Ridho Delfianov", "Stevanus Felixiano", "Gerald Christopher Andreas", 
             "Devi Humaira", "Rafa Agustant", "Evan Ahnaf Satyatama", "Giast Ahmad", "louis Koni Sung", 
             "Nurkahfi Amran Rahmada", "Reymontha Tarigan", "Marciano Lie", "Josef Harvey Mangaratua", 
-            "Muhammad Ichsan Firdaus", "Muhamad Rumi Rifai", "M Yusup Adi Surya", "Radhian Kemal. S", 
+            "Muhammad Ichsan Firdaus", "Muhamad Rumi Rifai", "M Yusup Adi Surya", 
             "Reghina Maisarah", "Jannatul Salsabila Putri Sanesa", "Vernandika Stanley Hansen", "Hosea Javier", 
-            "Tegar Muhamad Rizki", "Umar Bin Abdul Aziz", "Alif Al Husaini", "Fernaldy Andika Ekayafi", 
-            "Daffa Burane Nugraha", "Mohammad Aria Ardhana", "Farhan Karisma", "Darren Christian Liharja", 
+            "Tegar Muhamad Rizki", "Umar Bin Abdul Aziz", "Alif Al Husaini", 
+            "Daffa Burane Nugraha", "Farhan Karisma", 
             "Candra Wibawa", "Randy Harisna Mahsa", "Muhammad Adzikra Dhiya Alfauzan", "Adrian Jeremia Kurniawan", 
             "Adnan Hafizh Sinatria", "Leonardo Louis", "Sanjukin Ndube Pinem", "Jason Natanael Krisyanto", 
             "Ivan Arsy Himawan", "Fahri Nizar Argubi", "Rayhan Athar Prasnaputra", "Tamara Joy", 
-            "Muhammad Exsfo Al Banjari", "Theodora Paulina Walukow", "M. Ilhamsyah .R", "Dzakwan Fadhlullah", 
-            "Muhammad calvin asan", "Drias Ameliano Kevin David", "Ecki Fawwaz Hardian", 
+            "Muhammad Exsfo Al Banjari", "Theodora Paulina Walukow", "Dzakwan Fadhlullah", 
+            "Muhammad calvin asan", "Drias Ameliano Kevin David", 
             "Muhammad Danendra Syah Hidayatullah", "Muhammad Is'Ad Prabaswara", "Shervina Ananda Hardellya", 
             "Muhammad Nabil Indiharto", "Naufal Fakhri Ilyas", "Rais Abbiyu Putra", 
             "Imam Farrel Rayhandita Soetardjo Prabowo", "Nabila Rahmanisa Putri Arzetta", 
-            "Agra Palasara Putra Ardhiwiratno", "Gito Lesmana", "Muhammad Rizki Putra", 
-            "Rayhan Nugrah Kristio", "Tabina Adelia Rafa", "Wildan Rahmantya Andalaluna", 
+            "Agra Palasara Putra Ardhiwiratno", "Muhammad Rizki Putra","Tabina Adelia Rafa", "Wildan Rahmantya Andalaluna", 
             "Anel Fuad Abiyyu", "Devalco Aghazzan Muslion", "Muhammad Satria Dharma", 
             "Shaka Reyhan Saputra", "Jaya Goval Unedo Hutasoit", "Novem Romadhofi Kika", 
             "Rio Irawan", "Tegar Posma Diaz Simanjuntak", "Angga Prasetyo", "Robert William"
@@ -54,8 +55,7 @@
             "Hosea Javier", "Tegar Muhamad Rizki", "Umar Bin Abdul Aziz", "Alif Al Husaini", 
             "Daffa Burane Nugraha", "Farhan Karisma", "Adrian Jeremia Kurniawan", 
             "Adnan Hafizh Sinatria", "Jason Natanael Krisyanto", "Fahri Nizar Argubi", 
-            "Shervina Ananda Hardellya", "Naufal Fakhri Ilyas", "Nabila Rahmanisa Putri Arzetta", 
-            "Rayhan Nugrah Kristio", "Tabina Adelia Rafa", "Anel Fuad Abiyyu"
+            "Shervina Ananda Hardellya", "Naufal Fakhri Ilyas", "Nabila Rahmanisa Putri Arzetta", "Tabina Adelia Rafa", "Anel Fuad Abiyyu"
         ];
 
         fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`)
@@ -68,6 +68,10 @@
 
                 const iconNotInBEOrSheets = totalAnggotaIcon.filter(name => !anakBE.includes(name) && !sheetData.includes(name));
                 document.getElementById('icon-not-in-be-or-sheets').innerHTML = iconNotInBEOrSheets.map((name, index) => `<li>${name}</li>`).join('');
+
+                const jumlahArraySheets = sheetData.length;
+                const sisaSlotAnakBE = 63 - jumlahArraySheets - anakBENotInSheets.length;
+                document.getElementById('sisa-slot-anak-be').textContent = `Sisa Slot Non BE: ${sisaSlotAnakBE}`;
             })
             .catch(error => {
                 console.error('Error:', error);
